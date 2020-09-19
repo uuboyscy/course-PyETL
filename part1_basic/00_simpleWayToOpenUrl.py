@@ -10,13 +10,22 @@ if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unveri
 # 引入urllib
 from urllib import request
 
-
-url = 'http://ed668677.ngrok.io/hello_get?age=22&name=Allen'
+url = 'http://httpbin.org/get'
 
 res = request.urlopen(url)
 
-# print('res :',res)
-print('res.read() :',res.read())
+# print('res :', res)
+# print('res.read() :', res.read())
 
 # Try res.read().decode('utf-8')
 # print(res.read().decode('utf8'))
+
+###################################
+
+import requests
+
+url = 'http://httpbin.org/get'
+
+res = requests.get(url)
+
+print(res.text)

@@ -22,13 +22,16 @@ res = request.urlopen(req)
 
 soup = BeautifulSoup(res, 'html.parser')
 action_bar = soup.findAll('div', {'id' : 'action-bar-container'})
+action_bar = soup.findAll('div', id='action-bar-container')
+
+print(action_bar)
 
 # Try to get other <div> tag and <a> and in action_bar
-tmp_div = action_bar[0].div  # Notice that action_bar is a list
+tmp_div = action_bar[0].find('div')  # Notice that action_bar is a list
 print('Other <div> :')
 print(tmp_div)
 print()
-tmp_a = action_bar[0].a
+tmp_a = action_bar[0].find('a')
 print('Other <a> :')
 print(tmp_a)  # <a class="btn selected" href="/bbs/joke/index.html">看板</a>
 print()

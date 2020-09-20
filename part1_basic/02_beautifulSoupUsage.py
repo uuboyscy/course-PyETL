@@ -22,6 +22,9 @@ res = request.urlopen(req)
 
 soup = BeautifulSoup(res, 'html.parser')
 action_bar = soup.findAll('div', {'id' : 'action-bar-container'})
+action_bar = soup.findAll('div', id='action-bar-container')
+
+print(action_bar)
 
 # Try to get other <div> tag and <a> and in action_bar
 tmp_div = action_bar[0].find('div')  # Notice that action_bar is a list

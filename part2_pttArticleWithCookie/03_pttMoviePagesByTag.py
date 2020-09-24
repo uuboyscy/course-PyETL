@@ -12,9 +12,8 @@ from bs4 import BeautifulSoup
 
 headers = {'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'}
 
+url = 'https://www.ptt.cc/bbs/movie/index.html'
 for i in range(0,3):
-    url = 'https://www.ptt.cc/bbs/movie/index.html'
-
     res = requests.get(url, headers = headers)
 
     soup = BeautifulSoup(res.text, 'html.parser')

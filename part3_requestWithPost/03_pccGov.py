@@ -58,9 +58,7 @@ headers = {}
 for row in headers_str.split('\n'):
     headers[row.split(': ')[0]] = row.split(': ')[1]
 
-ss = requests.session()
-
-res = ss.post(url_target, headers=headers, data=post_data)
+res = requests.post(url_target, headers=headers, data=post_data)
 soup = BeautifulSoup(res.text, 'html.parser')
 # print(soup)
 

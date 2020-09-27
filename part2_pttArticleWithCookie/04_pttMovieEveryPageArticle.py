@@ -49,5 +49,9 @@ while page_number >= 8293:
             print(each_article)
             print(e.args)
             print('==========')
+        except FileNotFoundError as e:
+            pass
+        except OSError as e:
+            pass
 
     page_number -= 1

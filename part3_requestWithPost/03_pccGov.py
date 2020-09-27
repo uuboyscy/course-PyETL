@@ -14,8 +14,8 @@ tenderName:
 tenderId: 
 tenderStatus: 5,6,20,28
 tenderWay: 
-awardAnnounceStartDate: 108/11/01
-awardAnnounceEndDate: 108/11/01
+awardAnnounceStartDate: 109/09/25
+awardAnnounceEndDate: 109/09/25
 proctrgCate: 
 tenderRange: 
 minBudget: 

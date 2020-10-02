@@ -1,5 +1,6 @@
 # 若為Mac電腦，請先貼上此段程式碼
 ########### For Mac user ###########
+import time
 import os
 import ssl
 # used to fix Python SSL CERTIFICATE_VERIFY_FAILED
@@ -42,30 +43,30 @@ for i in range(0,n):
             author = ''
             title = ''
             datetime = ''
+            article_content = article_soup.select('div#main-content')[0].text.split('--')[0]
+            push_info_list = article_soup.select('div[class="push"] span')
+            for info in push_info_list:
+                if '推' in info.text:
+                    push_up += 1
+                if '噓' in info.text:
+                    push_down += 1
+            article_info_list = article_soup.select('div[class="article-metaline"] span')
+            for n, info in enumerate(article_info_list):
+                if (n+1)%6 == 2:
+                    author = info.text
+                if (n+1)%6 == 4:
+                    title = info.text
+                if (n+1)%6 == 0:
+                    datetime = info.text
+            score = push_up - push_down
+            article_content += '\n---split---\n'
+            article_content += '推: %s\n'%(push_up)
+            article_content += '噓: %s\n' % (push_down)
+            article_content += '分數: %s\n'%(score)
+            article_content += '作者: %s\n'%(author)
+            article_content += '標題: %s\n'%(title)
+            article_content += '時間: %s\n'%(datetime)
             try:
-                article_content = article_soup.select('div#main-content')[0].text.split('--')[0]
-                push_info_list = article_soup.select('div[class="push"] span')
-                for info in push_info_list:
-                    if '推' in info.text:
-                        push_up += 1
-                    if '噓' in info.text:
-                        push_down += 1
-                article_info_list = article_soup.select('div[class="article-metaline"] span')
-                for n, info in enumerate(article_info_list):
-                    if (n+1)%6 == 2:
-                        author = info.text
-                    if (n+1)%6 == 4:
-                        title = info.text
-                    if (n+1)%6 == 0:
-                        datetime = info.text
-                score = push_up - push_down
-                article_content += '\n---split---\n'
-                article_content += '推: %s\n'%(push_up)
-                article_content += '噓: %s\n' % (push_down)
-                article_content += '分數: %s\n'%(score)
-                article_content += '作者: %s\n'%(author)
-                article_content += '標題: %s\n'%(title)
-                article_content += '時間: %s\n'%(datetime)
                 with open(r'%s/%s.txt' % (resource_path, article_text), 'w', encoding='utf-8') as w:
                     w.write(article_content)
                 print()
@@ -74,6 +75,12 @@ for i in range(0,n):
                 print(article_url)
                 print(e.args)
                 print('==========')
+            except OSError as e:
+                print('==========')
+                print(article_url)
+                print(e.args)
+                print('==========')
+
         except AttributeError as e:
             print('==========')
             print(each_article)
@@ -81,3 +88,4 @@ for i in range(0,n):
             print('==========')
 
     url = 'https://www.ptt.cc' + soup.select('div[class="btn-group btn-group-paging"]')[0].select('a')[1]['href']
+

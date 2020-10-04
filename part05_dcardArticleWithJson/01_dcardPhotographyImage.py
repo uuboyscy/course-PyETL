@@ -9,7 +9,6 @@ if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unveri
 ####################################
 
 import requests
-from bs4 import BeautifulSoup
 import json
 # to save image by request.urlretrieve
 from urllib import request
@@ -21,12 +20,13 @@ res_path = r'./dcard_photography'
 if not os.path.exists(res_path):
     os.mkdir(res_path)
 
+# url = 'https://www.dcard.tw/_api/forums/photography/posts?popular=false&limit=30&before=232004767'
+url = 'https://www.dcard.tw/service/api/v2/forums/photography/posts?limit=24&before=234542096'
+
 for i in range(0, 3):
-    url = 'https://www.dcard.tw/_api/forums/photography/posts?popular=false&limit=30&before=232004767'
 
     res = requests.get(url, headers=headers)
-    soup = BeautifulSoup(res.text, 'html.parser')
-    json_string = str(soup)
+    json_string = str(res.text)
     js = json.loads(json_string)
 
     last_id = js[len(js) - 1]['id']
@@ -42,5 +42,5 @@ for i in range(0, 3):
             print('\tDone.')
         print()
 
-    url = 'https://www.dcard.tw/_api/forums/photography/posts?popular=false&limit=30&before=%s' % (last_id)
+    url = 'https://www.dcard.tw/service/api/v2/forums/photography/posts?limit=24&before=%s' % (last_id)
 

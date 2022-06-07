@@ -131,6 +131,5 @@ dmypy.json
 .idea
 ./tmp/
 test/test.py
-*.ipynb
 /test/
 .DS_Store

@@ -1,8 +1,14 @@
-from selenium.webdriver import Chrome
+# from selenium.webdriver import Chrome
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import requests
 from bs4 import BeautifulSoup
 
-driver = Chrome('./chromedriver')
+options = webdriver.ChromeOptions()
+options.binary_location = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+print(options.binary_location)
+driver = webdriver.Chrome('./chromedriver', options=options)
+# driver = webdriver.Chrome('./chromedriver')
 
 url = 'https://www.ptt.cc/bbs/index.html'
 
@@ -22,4 +28,4 @@ for c in cookie:
 
 res = ss.get('https://www.ptt.cc/bbs/Gossiping/index.html')
 soup = BeautifulSoup(res.text, 'html.parser')
-print(soup.prettify())
+# print(soup.prettify())

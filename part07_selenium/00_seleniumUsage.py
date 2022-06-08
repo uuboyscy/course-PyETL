@@ -1,8 +1,18 @@
-from selenium.webdriver import Chrome
+# from selenium.webdriver import Chrome
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 import requests
 from bs4 import BeautifulSoup
 
-driver = Chrome('./chromedriver')
+options = webdriver.ChromeOptions()
+# options.binary_location = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+# print(options.binary_location)
+# driver = webdriver.Chrome('./chromedriver', options=options)
+driver = webdriver.Chrome('./chromedriver')
+
+service = Service("./chromedriver")
+driver = webdriver.Chrome(service=service)
 
 url = 'https://www.ptt.cc/bbs/index.html'
 

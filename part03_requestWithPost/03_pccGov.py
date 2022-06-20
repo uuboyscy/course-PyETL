@@ -1,3 +1,7 @@
+####################
+# This is deprecated
+####################
+
 import requests
 from bs4 import BeautifulSoup
 

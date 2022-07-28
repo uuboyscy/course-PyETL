@@ -175,7 +175,12 @@ if __name__ == '__main__':
                 print("-----------------------")
 
             for articleObj in resultData['results']:
-                title = articleObj['title']
+                title = ""
+                try:
+                    title = articleObj['richSnippet']['metatags']['ogTitle']
+                except Exception as e:
+                    title = articleObj['title']
+
                 articleUrl = articleObj['unescapedUrl']
                 sn = ''
                 commentAmount = -1
@@ -189,14 +194,14 @@ if __name__ == '__main__':
                     continue
 
                 try:
-                    time.sleep(random.randint(2, 5))
+                    time.sleep(random.randint(1, 5))
                     commentAmount = gc.getCommentAmount(sn)
                 except Exception as e:
                     print(e.args)
                     commentAmount = -1
 
                 try:
-                    time.sleep(random.randint(2, 5))
+                    time.sleep(random.randint(1, 5))
                     likeAmount = gc.getLikeAmount(sn)
                 except Exception as e:
                     print(e.args)
@@ -221,9 +226,9 @@ if __name__ == '__main__':
                     [title, likeAmount, commentAmount, publishedDate, articleUrl]
                 )
 
-                time.sleep(random.randint(2, 20))
+                time.sleep(random.randint(2, 10))
 
-            time.sleep(random.randint(30, 60))
+            time.sleep(random.randint(2, 5))
 
         df = pd.DataFrame(data=data, columns=columns)
         df.to_csv(

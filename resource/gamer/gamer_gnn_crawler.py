@@ -144,8 +144,8 @@ class GamerCrawler:
 
 if __name__ == '__main__':
     queryKeyWordList = [
-        "RO",
-        "RO 仙境傳說",
+        # "RO",
+        # "RO 仙境傳說",
         "RO 仙境傳說：愛如初見",
         "RO仙境傳説：愛如初見",
         "仙境傳説：愛如初見",
@@ -172,6 +172,8 @@ if __name__ == '__main__':
                 print("-----------------------")
                 print("Regenerate cse_token...")
                 print(gc.genCseToken(force=True))
+                extractedCseText = gc.extractCseText(q=queryKeyWord, start=offSet * 10)
+                resultData = gc.cseTextToJson(extractedCseText)
                 print("-----------------------")
 
             for articleObj in resultData['results']:
@@ -194,21 +196,21 @@ if __name__ == '__main__':
                     continue
 
                 try:
-                    time.sleep(random.randint(1, 5))
+                    time.sleep(random.randint(1, 25) / 10)
                     commentAmount = gc.getCommentAmount(sn)
                 except Exception as e:
                     print(e.args)
                     commentAmount = -1
 
                 try:
-                    time.sleep(random.randint(1, 5))
+                    time.sleep(random.randint(1, 25) / 10)
                     likeAmount = gc.getLikeAmount(sn)
                 except Exception as e:
                     print(e.args)
                     likeAmount = -1
 
                 try:
-                    time.sleep(random.randint(2, 5))
+                    time.sleep(random.randint(1, 25) / 10)
                     publishedDate = gc.getPublishedDate(sn)
                 except Exception as e:
                     print(e.args)
@@ -226,7 +228,7 @@ if __name__ == '__main__':
                     [title, likeAmount, commentAmount, publishedDate, articleUrl]
                 )
 
-                time.sleep(random.randint(2, 10))
+                time.sleep(random.randint(2, 10) / 10)
 
             time.sleep(random.randint(2, 5))
 

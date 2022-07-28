@@ -40,15 +40,25 @@ class GamerCrawler:
         self.cseTokenUsedCount = 0
 
     def genCseToken(self, force=False) -> tuple:
+        """
+        CSE token need to be updated from time to time.
+        This method get/updates both cseToken and cselibVersion.
+        :param force: When True, both cseToken and cselibVersion will be updated
+        :return: Tuple contains cseToken/cselibVersion pairs
+        """
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
         }
 
+        # This is an Search Engine API provided by Google, the cx parameter is a fixed series number of Gamer
+        # Request the URL to get text content which contains string cseToken and cselibVersion
         url = "https://cse.google.com/cse.js?cx=partner-pub-9012069346306566:kd3hd85io9c"
 
+        # Use the following regular expression pattern to find cseToken and cselibVersion
         cseTokenRePattern = r'"cse_token":[\s]* "[0-9a-zA-Z\-\_:]*"'
         cselibVersionRePattern = r'"cselibVersion":[\s]* "[0-9a-zA-Z\-\_:]*"'
 
+        # Conditions to generate new token
         if self.cseToken == None or self.cseTokenUsedCount > 5 or force:
             res = requests.get(url, headers=headers)
             matchCseTokenObj = re.search(cseTokenRePattern, res.text)
@@ -62,6 +72,13 @@ class GamerCrawler:
         return (self.cseToken, self.cselibVersion)
 
     def extractCseText(self, q: str, start=0, sort='date') -> str:
+        """
+
+        :param q: Keyword string for query
+        :param start:
+        :param sort:
+        :return:
+        """
         self.genCseToken()
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
@@ -117,7 +134,7 @@ class GamerCrawler:
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
             "referer": "https://gnn.gamer.com.tw/detail.php?sn={}".format(articleSn),
-            "cookie": "_gid=GA1.3.800346094.1658831722; __gads=ID=f03b6a46efed39d5:T=1658831737:S=ALNI_MZ0uW5i3TTNa5riIFAdxi5W1eSdhQ; buap_modr=p014; ckForumListOrder=post; ckAPP_VCODE=1328; ckBahamutCsrfToken=fa82599a4bbb0ff1; __gpi=UID=000008175adc3c2a:T=1658831737:RT=1658887731:S=ALNI_MbDpsVR6L5mfXM2uzY9StYVx2wcfQ; ckBahaAd=0------------------------; ckBH_lastBoard=[[%225191%22%2C%22%E6%96%B0%E5%A4%A9%E7%BF%BC%E4%B9%8B%E9%8D%8A%EF%BC%88TalesWeaver%EF%BC%89%22]%2C[%227650%22%2C%22%E6%96%B0%E6%A5%93%E4%B9%8B%E8%B0%B7%22]]; buap_puoo=p301%20p103; _ga=GA1.1.1951735684.1658831722; _ga_2Q21791Y9D=GS1.1.1658904159.4.1.1658906035.60"
+            "cookie": "_gid=GA1.3.800346094.1658831722; __gads=ID=f03b6a46efed39d5:T=1658831737:S=ALNI_MZ0uW5i3TTNa5riIFAdxi5W1eSdhQ; buap_modr=p014; ckForumListOrder=post; ckAPP_VCODE=1328; ckBahaAd=0------------------------; ckBahamutCsrfToken=e51c2d814d7090ab; __gpi=UID=000008175adc3c2a:T=1658831737:RT=1659003244:S=ALNI_MbDpsVR6L5mfXM2uzY9StYVx2wcfQ; ckBH_lastBoard=[[%2231318%22%2C%22%E5%A4%A9%E7%BF%BC%E4%B9%8B%E9%8D%8A%20M%22]%2C[%225191%22%2C%22%E6%96%B0%E5%A4%A9%E7%BF%BC%E4%B9%8B%E9%8D%8A%EF%BC%88TalesWeaver%EF%BC%89%22]%2C[%227650%22%2C%22%E6%96%B0%E6%A5%93%E4%B9%8B%E8%B0%B7%22]]; buap_puoo=p402%20p401; _gat=1; _ga_2Q21791Y9D=GS1.1.1659003243.9.1.1659004050.28; _ga=GA1.1.1951735684.1658831722"
         }
         params = {
             "url": "https://gnn.gamer.com.tw/detail.php?sn={}".format(articleSn)
@@ -146,9 +163,9 @@ if __name__ == '__main__':
     queryKeyWordList = [
         # "RO",
         # "RO 仙境傳說",
-        "RO 仙境傳說：愛如初見",
-        "RO仙境傳説：愛如初見",
-        "仙境傳説：愛如初見",
+        # "RO 仙境傳說：愛如初見",
+        # "RO仙境傳説：愛如初見",
+        # "仙境傳説：愛如初見",
         "天翼之鍊",
         "TALES WEAVER",
         "TALESWEAVER"
@@ -168,13 +185,26 @@ if __name__ == '__main__':
             extractedCseText = gc.extractCseText(q=queryKeyWord, start=offSet * 10)
             resultData = gc.cseTextToJson(extractedCseText)
 
-            if 'results' not in resultData:
+            retry = 0
+            runBreak = False
+            while 'results' not in resultData:
+                retry += 1
+                time.sleep(random.randint(10, 15))
                 print("-----------------------")
+                print("OffSet:", offSet)
                 print("Regenerate cse_token...")
                 print(gc.genCseToken(force=True))
                 extractedCseText = gc.extractCseText(q=queryKeyWord, start=offSet * 10)
                 resultData = gc.cseTextToJson(extractedCseText)
                 print("-----------------------")
+
+                testExtractedCseText = gc.extractCseText(q=queryKeyWord, start=0)
+                testResultData = gc.cseTextToJson(testExtractedCseText)
+                if retry > 5 and 'results' not in testResultData:
+                    runBreak = True
+                    break
+            if runBreak:
+                break
 
             for articleObj in resultData['results']:
                 title = ""
@@ -234,7 +264,7 @@ if __name__ == '__main__':
 
         df = pd.DataFrame(data=data, columns=columns)
         df.to_csv(
-            "./gnn_output/{}.csv".format(queryKeyWord),
+            "./gnn_output/{}_{}.csv".format(queryKeyWord, offSet),
             index=False,
             encoding="utf-8-sig"
         )

@@ -200,7 +200,7 @@ if __name__ == '__main__':
 
                 testExtractedCseText = gc.extractCseText(q=queryKeyWord, start=0)
                 testResultData = gc.cseTextToJson(testExtractedCseText)
-                if retry > 5 and 'results' not in testResultData:
+                if retry > 5 and 'results' in testResultData:
                     runBreak = True
                     break
             if runBreak:

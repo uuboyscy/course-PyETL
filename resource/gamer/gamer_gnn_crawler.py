@@ -34,6 +34,12 @@ from bs4 import BeautifulSoup
 class GamerCrawler:
 
     def __init__(self):
+        """
+        cxSeries: This is a fixed series number of Gamer.
+        cseToken: A token of Google search engine, and the token need to be changed frequently with calling API.
+        cselibVersion: Just like cseToken. It may be no need to be changed, but also can be extracted from API.
+        cseTokenUsedCount: Calculate the number of times token be used. It used to reset token.
+        """
         self.cxSeries = "partner-pub-9012069346306566:kd3hd85io9c"
         self.cseToken = None  # 3e1664f444e6eb06
         self.cselibVersion = None  # AB1-RNUa21L3zW3YjE3vq6xHeRVG:1658974378322
@@ -71,14 +77,21 @@ class GamerCrawler:
 
         return (self.cseToken, self.cselibVersion)
 
-    def extractCseText(self, q: str, start=0, sort='date') -> str:
+    def extractCseText(self, q: str, start=0, sort='date', queryType='news') -> str:
         """
-
+        To get string of original articles-object which contains JSON data in it.
+        The returned string can be parsed to JSON by method cseTextToJson() below.
         :param q: Keyword string for query
-        :param start:
-        :param sort:
-        :return:
+        :param start: Offset of articles returned. It must be multiple of 10
+        :param sort: Sort the returned articles. May be empty string "" or "date"
+        :param queryType: Articles with specific query type will be returned. May be "default" or "news"
+        :return: A string of original articles-object which contains JSON data in it
         """
+        queryTypeMap = {
+            "default": "",
+            "news": " more:找新聞",
+            "": ""
+        }
         self.genCseToken()
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
@@ -92,7 +105,7 @@ class GamerCrawler:
             #             'start': '40',
             'cselibv': self.cselibVersion,
             'cx': self.cxSeries,
-            'q': q + ' more:找新聞',
+            'q': q + queryTypeMap[queryType],
             'safe': 'active',
             'cse_tok': self.cseToken,
             'sort': sort,
@@ -110,6 +123,11 @@ class GamerCrawler:
         return res.text
 
     def cseTextToJson(self, cseText: str) -> dict:
+        """
+        Only used to transform the string returned by extractCseText()
+        :param cseText: String returned by extractCseText()
+        :return: Extracted JSON from extractCseText()'s string
+        """
         rePattern = r'/\*O_o\*/[\r\n]+google.search.cse.api[0-9]+\('
         replaceTo = ''
         resultJsonStr = re.sub(rePattern, replaceTo, cseText)[:-2]
@@ -131,6 +149,7 @@ class GamerCrawler:
             return BeautifulSoup(res.json()['data']['comment'], 'html.parser').select('p').__len__() - 1
 
     def getLikeAmount(self, articleSn: int) -> int:
+        # Cookie need to be changed from time to time
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
             "referer": "https://gnn.gamer.com.tw/detail.php?sn={}".format(articleSn),
@@ -161,11 +180,11 @@ class GamerCrawler:
 
 if __name__ == '__main__':
     queryKeyWordList = [
-        # "RO",
-        # "RO 仙境傳說",
-        # "RO 仙境傳說：愛如初見",
-        # "RO仙境傳説：愛如初見",
-        # "仙境傳説：愛如初見",
+        "RO",
+        "RO 仙境傳說",
+        "RO 仙境傳說：愛如初見",
+        "RO仙境傳説：愛如初見",
+        "仙境傳説：愛如初見",
         "天翼之鍊",
         "TALES WEAVER",
         "TALESWEAVER"

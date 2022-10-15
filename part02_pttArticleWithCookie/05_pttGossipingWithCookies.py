@@ -59,7 +59,10 @@ for i in range(0,n):
             article_content += '標題: %s\n'%(title)
             article_content += '時間: %s\n'%(datetime)
             try:
-                with open(r'%s/%s.txt' % (resource_path, article_text), 'w', encoding='utf-8') as w:
+                new_article_text = article_text
+                for iw in '[\/:*?"<>|]':
+                    new_article_text = new_article_text.replace(iw, '_')
+                with open(r'%s/%s.txt' % (resource_path, new_article_text), 'w', encoding='utf-8') as w:
                     w.write(article_content)
                 print()
             except FileNotFoundError as e:

@@ -13,6 +13,7 @@ time.sleep(5)
 
 # 按下查詢按鈕
 driver.find_element_by_xpath('//*[@id="__next"]/div[1]/div/div[1]/div/div/form/button[2]').click()
+# /html/body/div[1]/div[1]/div/div[1]/div/div/form/button[2]
 time.sleep(5)
 
 # 將網頁畫面往下滾動至離頂部 5000 高度的位子

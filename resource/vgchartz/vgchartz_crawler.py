@@ -36,7 +36,7 @@ s = rawJsonObj \
     .replace("\n", " ") \
     .replace("\t", " ") \
     .replace("'", "\"") \
-    .replace("{", "{ ") 
+    .replace("{", "{ ")
 
 keySet = set(re.findall(r'[a-zA-Z0-9]*:', s))
 
@@ -45,7 +45,7 @@ for kw in keySet:
     newKw = newKw.replace(':', '":')
 #     print(newKw)
     s = s.replace(kw, newKw)
-    
+
 jsonData = eval(
     s.replace("true", "True").replace("false", "False")
 )
@@ -62,15 +62,15 @@ dfList = list()
 for deviceInfo in jsonData["series"]:
     deviceName = deviceInfo["name"]
     data = deviceInfo["data"]
-    
+
     df = pd.DataFrame(data=data)
     df.columns = ["timestamp_ms", "value"]
-    
+
     df["device_name"] = deviceName
     df["datetime"] = df["timestamp_ms"].apply(lambda ts_ms: pd.to_datetime(ts_ms, unit='ms'))
     df["year"] = df["datetime"].apply(lambda dt: dt.year)
     df["month"] = df["datetime"].apply(lambda dt: dt.month)
-    
+
     dfList.append(df)
 #     df.to_csv(f"{deviceName}.csv", index=0, encoding='utf-8-sig')
 

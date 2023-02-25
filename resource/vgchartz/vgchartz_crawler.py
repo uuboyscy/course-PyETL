@@ -70,9 +70,10 @@ for deviceInfo in jsonData["series"]:
     df["datetime"] = df["timestamp_ms"].apply(lambda ts_ms: pd.to_datetime(ts_ms, unit='ms'))
     df["year"] = df["datetime"].apply(lambda dt: dt.year)
     df["month"] = df["datetime"].apply(lambda dt: dt.month)
-
+    df['YYYYMM'] = df['year'].apply(lambda x:str(x)) + df['month'].apply(lambda x:str(x))
+    df['unit(Mu)'] = df['value'] / 1000000
     dfList.append(df)
-#     df.to_csv(f"{deviceName}.csv", index=0, encoding='utf-8-sig')
 
 df = pd.concat(dfList)
-df[['device_name', 'timestamp_ms', 'value', 'datetime', 'year', 'month']].to_csv("all.csv", index=0, encoding="utf-8-sig")
+
+df[['YYYYMM','year','month', 'device_name', 'timestamp_ms', 'value', 'unit(Mu)']].to_excel("../vgchartz_rawdata_20221108.xlsx", index=0, encoding="utf-8-sig")

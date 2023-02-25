@@ -110,6 +110,7 @@ zipp = "==3.8.0"
 [dev-packages]
 bandit = "*"
 flake8 = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.8"

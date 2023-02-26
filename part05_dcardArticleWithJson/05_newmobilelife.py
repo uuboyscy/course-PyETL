@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-# https://www.newmobilelife.com/
+# https://www.newmobilelife.com/%e6%9c%80%e6%96%b0%e6%96%87%e7%ab%a0/
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'}
 
 url = "https://www.newmobilelife.com/wp-json/csco/v1/more-posts"

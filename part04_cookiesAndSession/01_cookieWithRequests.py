@@ -6,9 +6,7 @@ headers = {
 
 url = 'https://www.ptt.cc/bbs/Gossiping/index.html'
 
-cookies = {
-    'over18': '1'
-}
+cookies = {'over18': '1'}
 
 res = requests.get(url, headers=headers, cookies=cookies)
 

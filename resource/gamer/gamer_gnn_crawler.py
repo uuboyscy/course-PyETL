@@ -28,11 +28,11 @@ import time
 import re
 import os
 from bs4 import BeautifulSoup
+
 # from urllib.parse import unquote
 
 
 class GamerCrawler:
-
     def __init__(self):
         """
         cxSeries: This is a fixed series number of Gamer.
@@ -58,7 +58,9 @@ class GamerCrawler:
 
         # This is an Search Engine API provided by Google, the cx parameter is a fixed series number of Gamer
         # Request the URL to get text content which contains string cseToken and cselibVersion
-        url = "https://cse.google.com/cse.js?cx=partner-pub-9012069346306566:kd3hd85io9c"
+        url = (
+            "https://cse.google.com/cse.js?cx=partner-pub-9012069346306566:kd3hd85io9c"
+        )
 
         # Use the following regular expression pattern to find cseToken and cselibVersion
         cseTokenRePattern = r'"cse_token":[\s]* "[0-9a-zA-Z\-\_:]*"'
@@ -69,8 +71,12 @@ class GamerCrawler:
             res = requests.get(url, headers=headers)
             matchCseTokenObj = re.search(cseTokenRePattern, res.text)
             matchCselibVersionObj = re.search(cselibVersionRePattern, res.text)
-            self.cseToken = json.loads("{" + matchCseTokenObj.group(0) + "}")["cse_token"]
-            self.cselibVersion = json.loads("{" + matchCselibVersionObj.group(0) + "}")["cselibVersion"]
+            self.cseToken = json.loads("{" + matchCseTokenObj.group(0) + "}")[
+                "cse_token"
+            ]
+            self.cselibVersion = json.loads("{" + matchCselibVersionObj.group(0) + "}")[
+                "cselibVersion"
+            ]
             self.cseTokenUsedCount = 0
         else:
             self.cseTokenUsedCount += 1
@@ -87,11 +93,7 @@ class GamerCrawler:
         :param queryType: Articles with specific query type will be returned. May be "default" or "news"
         :return: A string of original articles-object which contains JSON data in it
         """
-        queryTypeMap = {
-            "default": "",
-            "news": " more:找新聞",
-            "": ""
-        }
+        queryTypeMap = {"default": "", "news": " more:找新聞", "": ""}
         self.genCseToken()
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
@@ -112,7 +114,7 @@ class GamerCrawler:
             'exp': 'csqr,cc',
             'rsToken': 'undefined',
             'afsExperimentId': 'undefined',
-            'callback': 'google.search.cse.api{}'.format(random.randint(148, 17963))
+            'callback': 'google.search.cse.api{}'.format(random.randint(148, 17963)),
         }
         if not start == 0:
             params["start"] = str(start)
@@ -141,23 +143,32 @@ class GamerCrawler:
 
         url = "https://gnn.gamer.com.tw/ajax/gnn-html.php?sn={}".format(articleSn)
         res = requests.get(url, headers=headers)
-        oriCommentAmountStr = BeautifulSoup(res.json()['data']['comment'], 'html.parser').select_one('p').text  # 顯示所有的 6 則評語
+        oriCommentAmountStr = (
+            BeautifulSoup(res.json()['data']['comment'], 'html.parser')
+            .select_one('p')
+            .text
+        )  # 顯示所有的 6 則評語
         if '顯示所有的' in oriCommentAmountStr:
-            commentAmountStr = oriCommentAmountStr.replace('顯示所有的', '').replace('則評語', '')
+            commentAmountStr = oriCommentAmountStr.replace('顯示所有的', '').replace(
+                '則評語', ''
+            )
             return int(commentAmountStr)
         else:
-            return BeautifulSoup(res.json()['data']['comment'], 'html.parser').select('p').__len__() - 1
+            return (
+                BeautifulSoup(res.json()['data']['comment'], 'html.parser')
+                .select('p')
+                .__len__()
+                - 1
+            )
 
     def getLikeAmount(self, articleSn: int) -> int:
         # Cookie need to be changed from time to time
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
             "referer": "https://gnn.gamer.com.tw/detail.php?sn={}".format(articleSn),
-            "cookie": "_gid=GA1.3.800346094.1658831722; __gads=ID=f03b6a46efed39d5:T=1658831737:S=ALNI_MZ0uW5i3TTNa5riIFAdxi5W1eSdhQ; buap_modr=p014; ckForumListOrder=post; ckAPP_VCODE=1328; ckBahaAd=0------------------------; ckBahamutCsrfToken=e51c2d814d7090ab; __gpi=UID=000008175adc3c2a:T=1658831737:RT=1659003244:S=ALNI_MbDpsVR6L5mfXM2uzY9StYVx2wcfQ; ckBH_lastBoard=[[%2231318%22%2C%22%E5%A4%A9%E7%BF%BC%E4%B9%8B%E9%8D%8A%20M%22]%2C[%225191%22%2C%22%E6%96%B0%E5%A4%A9%E7%BF%BC%E4%B9%8B%E9%8D%8A%EF%BC%88TalesWeaver%EF%BC%89%22]%2C[%227650%22%2C%22%E6%96%B0%E6%A5%93%E4%B9%8B%E8%B0%B7%22]]; buap_puoo=p402%20p401; _gat=1; _ga_2Q21791Y9D=GS1.1.1659003243.9.1.1659004050.28; _ga=GA1.1.1951735684.1658831722"
+            "cookie": "_gid=GA1.3.800346094.1658831722; __gads=ID=f03b6a46efed39d5:T=1658831737:S=ALNI_MZ0uW5i3TTNa5riIFAdxi5W1eSdhQ; buap_modr=p014; ckForumListOrder=post; ckAPP_VCODE=1328; ckBahaAd=0------------------------; ckBahamutCsrfToken=e51c2d814d7090ab; __gpi=UID=000008175adc3c2a:T=1658831737:RT=1659003244:S=ALNI_MbDpsVR6L5mfXM2uzY9StYVx2wcfQ; ckBH_lastBoard=[[%2231318%22%2C%22%E5%A4%A9%E7%BF%BC%E4%B9%8B%E9%8D%8A%20M%22]%2C[%225191%22%2C%22%E6%96%B0%E5%A4%A9%E7%BF%BC%E4%B9%8B%E9%8D%8A%EF%BC%88TalesWeaver%EF%BC%89%22]%2C[%227650%22%2C%22%E6%96%B0%E6%A5%93%E4%B9%8B%E8%B0%B7%22]]; buap_puoo=p402%20p401; _gat=1; _ga_2Q21791Y9D=GS1.1.1659003243.9.1.1659004050.28; _ga=GA1.1.1951735684.1658831722",
         }
-        params = {
-            "url": "https://gnn.gamer.com.tw/detail.php?sn={}".format(articleSn)
-        }
+        params = {"url": "https://gnn.gamer.com.tw/detail.php?sn={}".format(articleSn)}
 
         url = "https://wall.gamer.com.tw/api/link_post.php"
         res = requests.get(url, params=params, headers=headers)
@@ -173,7 +184,9 @@ class GamerCrawler:
         res = requests.get(url, headers=headers)
         soup = BeautifulSoup(res.text, 'html.parser')
 
-        for jsonData in json.loads(soup.select_one('script[type="application/ld+json"]').text):
+        for jsonData in json.loads(
+            soup.select_one('script[type="application/ld+json"]').text
+        ):
             if 'datePublished' in jsonData:
                 return jsonData['datePublished']
 
@@ -187,7 +200,7 @@ if __name__ == '__main__':
         "仙境傳説：愛如初見",
         "天翼之鍊",
         "TALES WEAVER",
-        "TALESWEAVER"
+        "TALESWEAVER",
     ]
 
     if not os.path.exists("./gnn_output"):
@@ -197,7 +210,13 @@ if __name__ == '__main__':
 
         gc = GamerCrawler()
 
-        columns = ["title", "like_amount", "comment_amount", "published_date", "article_url"]
+        columns = [
+            "title",
+            "like_amount",
+            "comment_amount",
+            "published_date",
+            "article_url",
+        ]
         data = list()
 
         for offSet in range(0, 10):
@@ -285,5 +304,5 @@ if __name__ == '__main__':
         df.to_csv(
             "./gnn_output/{}_{}.csv".format(queryKeyWord, offSet),
             index=False,
-            encoding="utf-8-sig"
+            encoding="utf-8-sig",
         )

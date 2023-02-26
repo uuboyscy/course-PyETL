@@ -31,22 +31,31 @@ import os
 import ssl
 
 # used to fix Python SSL CERTIFICATE_VERIFY_FAILED
-if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None)):
+if not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(
+    ssl, '_create_unverified_context', None
+):
     ssl._create_default_https_context = ssl._create_unverified_context
 
 
 class WeatherAPI:
-
     def __init__(self, town_id=81):
         #         self.city_id = city_id
         self.city_id = 8
         self.town_id = town_id
         self.url_all_cities = 'https://works.ioa.tw/weather/api/all.json'
-        self.url_get_towns_by_cities = 'https://works.ioa.tw/weather/api/cates/%s.json'  ###
-        self.url_get_towns_information = 'https://works.ioa.tw/weather/api/towns/%s.json'  ###
+        self.url_get_towns_by_cities = (
+            'https://works.ioa.tw/weather/api/cates/%s.json'  ###
+        )
+        self.url_get_towns_information = (
+            'https://works.ioa.tw/weather/api/towns/%s.json'  ###
+        )
         self.url_get_url = 'https://works.ioa.tw/weather/api/url.json'
-        self.url_get_towns_weather = 'https://works.ioa.tw/weather/api/weathers/%s.json'  ###
-        self.url_img_path_dir = json.loads(request.urlopen(self.url_get_url).read())['img']
+        self.url_get_towns_weather = (
+            'https://works.ioa.tw/weather/api/weathers/%s.json'  ###
+        )
+        self.url_img_path_dir = json.loads(request.urlopen(self.url_get_url).read())[
+            'img'
+        ]
 
         # weather information
         self.img_url = ''
@@ -63,7 +72,7 @@ class WeatherAPI:
             'status': '',
             'update_time': '',
             'desc': '',
-            'img_url': ''
+            'img_url': '',
         }
         # weather history
         self.histories = {}
@@ -95,19 +104,31 @@ class WeatherAPI:
         return data_city_dict
 
     def getTown(self):
-        data_towns = request.urlopen(self.url_get_towns_by_cities % (self.city_id)).read().decode('utf-8')
+        data_towns = (
+            request.urlopen(self.url_get_towns_by_cities % (self.city_id))
+            .read()
+            .decode('utf-8')
+        )
         data_towns_dict = json.loads(data_towns)
 
         return data_towns_dict
 
     def getTownInformation(self):
-        data_towns_information = request.urlopen(self.url_get_towns_information % (self.town_id)).read().decode('utf-8')
+        data_towns_information = (
+            request.urlopen(self.url_get_towns_information % (self.town_id))
+            .read()
+            .decode('utf-8')
+        )
         data_towns_information_dict = json.loads(data_towns_information)
 
         return data_towns_information_dict
 
     def getTownWeatherInformation(self):
-        data_weather_information = request.urlopen(self.url_get_towns_weather % (self.town_id)).read().decode('utf-8')
+        data_weather_information = (
+            request.urlopen(self.url_get_towns_weather % (self.town_id))
+            .read()
+            .decode('utf-8')
+        )
         data_weather_information_dict = json.loads(data_weather_information)
 
         return data_weather_information_dict
@@ -125,8 +146,17 @@ class WeatherAPI:
         self.update_time = tmp_dict['at']
         self.specials = tmp_dict['specials']
 
-        return [self.img_url, self.desc, self.temperature, self.felt_air_temp, self.humidity, self.rainfall,
-                self.sunrise, self.sunset, self.update_time]
+        return [
+            self.img_url,
+            self.desc,
+            self.temperature,
+            self.felt_air_temp,
+            self.humidity,
+            self.rainfall,
+            self.sunrise,
+            self.sunset,
+            self.update_time,
+        ]
 
     def getTownWeatherInformationHistory(self):
         tmp_dict = self.getTownWeatherInformation()

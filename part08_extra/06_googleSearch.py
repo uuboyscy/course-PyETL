@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+
 # import jieba
 import time
 import random
@@ -8,6 +9,7 @@ import warnings
 from urllib import parse
 from urllib3.exceptions import InsecureRequestWarning
 from bs4 import BeautifulSoup
+
 warnings.simplefilter('ignore', InsecureRequestWarning)
 
 '''Setup'''
@@ -47,7 +49,9 @@ with open('./config.txt', 'r', encoding='utf-8') as f:
     plist = f.read().split('\n')
 plist = [i for i in plist if len(i.strip()) > 0]
 plist = [i for i in plist if i.strip()[0] != '#']
-pdist = {i.strip().split('=')[0].strip(): i.strip().split('=')[-1].strip() for i in plist}
+pdist = {
+    i.strip().split('=')[0].strip(): i.strip().split('=')[-1].strip() for i in plist
+}
 
 # Compose tbs
 query_str = pdist['keyword']
@@ -64,7 +68,8 @@ for n, q in enumerate(query_lst):
 
 # Set headers and url
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'}
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'
+}
 url = f'https://www.google.com/search?lr=lang_zh-TW&safe=active&rlz=1C1GCEV_enTW864TW864&biw=1920&bih=888&tbs=lr%3Alang_1zh-TW%2Cqdr%3A{qdr}&ei=9f9BXqueFLvWmAWAlL64CQ&q={query_par}&oq={query_par}&start={page}'
 print('[Info] Search:', url)
 
@@ -112,7 +117,9 @@ while len(content_html) > 0:
         try:
             tmp_res = requests.get(tmp_url, headers=headers, verify=False)
             try:
-                tmp_res_text = BeautifulSoup(tmp_res.text, 'html.parser').select('body')[0].text
+                tmp_res_text = (
+                    BeautifulSoup(tmp_res.text, 'html.parser').select('body')[0].text
+                )
                 re_words = re.compile(u"[\u4e00-\u9fa5]+")
                 tmp_re_res = re.findall(re_words, tmp_res_text)
                 for rw in tmp_re_res:
@@ -124,7 +131,6 @@ while len(content_html) > 0:
 
         except:
             tmp_full_content = '網頁請求發生錯誤！'
-            pass
 
             # Append data
         tmp_title = tmp_title.replace(',', '，')

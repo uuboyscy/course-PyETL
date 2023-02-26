@@ -4,7 +4,9 @@ import ssl
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'}
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'
+}
 
 # 政治新聞 - Yahoo奇摩新聞
 url_yahoo_politics = 'https://tw.news.yahoo.com/rss/politics'
@@ -19,7 +21,7 @@ url_tec_bridge = 'https://blog.techbridge.cc/atom.xml'
 
 # 以 Yahoo奇摩新聞 為例
 url = url_yahoo_politics
-req = request.Request(url = url, headers = headers)
+req = request.Request(url=url, headers=headers)
 res = request.urlopen(req)
 res = res.read().decode('utf-8')
 soup = BeautifulSoup(res)

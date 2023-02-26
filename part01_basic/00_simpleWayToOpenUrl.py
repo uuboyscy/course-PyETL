@@ -2,8 +2,11 @@
 ########### For Mac user ###########
 import os
 import ssl
+
 # used to fix Python SSL CERTIFICATE_VERIFY_FAILED
-if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None)):
+if not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(
+    ssl, '_create_unverified_context', None
+):
     ssl._create_default_https_context = ssl._create_unverified_context
 ####################################
 

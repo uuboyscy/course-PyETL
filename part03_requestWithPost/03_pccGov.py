@@ -5,36 +5,38 @@
 import requests
 from bs4 import BeautifulSoup
 
-url_target = 'https://web.pcc.gov.tw/tps/pss/tender.do?searchMode=common&searchType=advance'
+url_target = (
+    'https://web.pcc.gov.tw/tps/pss/tender.do?searchMode=common&searchType=advance'
+)
 
 # post data
 post_data_str = """method: search
 searchMethod: true
 searchTarget: ATM
-orgName: 
-orgId: 
+orgName:
+orgId:
 hid_1: 1
-tenderName: 
-tenderId: 
+tenderName:
+tenderId:
 tenderStatus: 5,6,20,28
-tenderWay: 
+tenderWay:
 awardAnnounceStartDate: 109/09/25
 awardAnnounceEndDate: 109/09/25
-proctrgCate: 
-tenderRange: 
-minBudget: 
-maxBudget: 
-item: 
+proctrgCate:
+tenderRange:
+minBudget:
+maxBudget:
+item:
 hid_2: 1
-gottenVendorName: 
-gottenVendorId: 
+gottenVendorName:
+gottenVendorId:
 hid_3: 1
-submitVendorName: 
-submitVendorId: 
-location: 
-execLocationArea: 
-priorityCate: 
-isReConstruct: 
+submitVendorName:
+submitVendorId:
+location:
+execLocationArea:
+priorityCate:
+isReConstruct:
 btnQuery: 查詢"""
 
 post_data = {}
@@ -69,9 +71,9 @@ soup = BeautifulSoup(res.text, 'html.parser')
 title = soup.select('div[id="print_area"] td[align="left"]')
 
 for n, i in enumerate(title):
-    if (n+1) % 4 == 2:
+    if (n + 1) % 4 == 2:
         print(i.u.text)
     else:
         print(i.text)
-    if (n+1) % 4 == 0:
+    if (n + 1) % 4 == 0:
         print('=' * 20)

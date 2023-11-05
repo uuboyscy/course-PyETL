@@ -9,6 +9,7 @@ requests = "*"
 pandas = "*"
 jieba = "*"
 selenium = "*"
+jupyter = "*"
 
 [dev-packages]
 

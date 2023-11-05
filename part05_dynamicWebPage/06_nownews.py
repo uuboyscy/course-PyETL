@@ -1,3 +1,5 @@
+import os
+
 import requests
 
 # https://www.nownews.com/cat/column/
@@ -23,3 +25,22 @@ for data in res.json()["data"]["newsList"]:
     print(article_url)
     print(article_image_url)
     print("========")
+
+# Retrieve images
+image_folder_path = "part05_dynamicWebPage/retrieved_images"
+if not os.path.exists(image_folder_path):
+    os.mkdir(image_folder_path)
+
+for data in res.json()["data"]["newsList"]:
+    article_title = data["postTitle"]
+    article_image_url = data["imageUrl"]
+
+    res_image = requests.get(
+        article_image_url, headers=headers, timeout=600,
+    )
+
+    image_name = f"{article_title}.{article_image_url.split('.')[-1].split('?')[0]}"
+    for abnormal_word in [":", "!", "?", "/"]:
+        image_name = image_name.replace(abnormal_word, "_")
+    with open(f"{image_folder_path}/{image_name}", "wb") as f:
+        f.write(res_image.content)

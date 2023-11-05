@@ -10,7 +10,7 @@ url = "https://www.newmobilelife.com/wp-json/csco/v1/more-posts"
 
 data = {"action": "csco_ajax_load_more", "page": 4, "posts_per_page": 30}
 
-res = requests.post(url, data=data)
+res = requests.post(url, data=data, timeout=600)
 jsondata = res.json()
 
 html = jsondata["data"]["content"]

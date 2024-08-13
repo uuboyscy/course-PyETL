@@ -12,6 +12,7 @@ selenium = "*"
 jupyter = "*"
 
 [dev-packages]
+ipykernel = "*"
 
 [requires]
 python_version = "3.11"

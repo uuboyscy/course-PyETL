@@ -10,6 +10,7 @@ pandas = "*"
 jieba = "*"
 selenium = "*"
 jupyter = "*"
+openpyxl = "*"
 
 [dev-packages]
 ipykernel = "*"

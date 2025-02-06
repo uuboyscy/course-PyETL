@@ -1,6 +1,9 @@
+"""Archived. Web site changed."""
+
+import json
+
 import requests
 from bs4 import BeautifulSoup
-import json
 
 url = 'https://buzzorange.com/techorange/'
 url_post = 'https://buzzorange.com/techorange/wp-admin/admin-ajax.php'

@@ -1,3 +1,5 @@
+"""Archived. Web site changed."""
+
 # 若為Mac電腦，請先貼上此段程式碼
 ########### For Mac user ###########
 import os
@@ -10,11 +12,11 @@ if not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(
     ssl._create_default_https_context = ssl._create_unverified_context
 ####################################
 
-import requests
 import json
-
 # to save image by request.urlretrieve
 from urllib import request
+
+import requests
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'

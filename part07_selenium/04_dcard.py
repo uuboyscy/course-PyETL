@@ -1,24 +1,32 @@
-from selenium.webdriver import Chrome
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
 import time
 
-service = Service("/Users/uuboy.scy/PycharmProjects/course-pyetl/part07_selenium/chromedriver")
-driver = Chrome(service=service)
-url = 'https://www.dcard.tw/f/photography'
+from selenium.webdriver import Chrome
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+
+chrome_options = Options()
+
+
+# 基本設定
+# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+chrome_options.add_argument("--start-maximized")
+
+# 設定 User Agent
+chrome_options.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36")
+
+# 排除自動化標誌
+chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+chrome_options.add_experimental_option("useAutomationExtension", False)
+
+driver = Chrome(options=chrome_options)
+
+url = "https://www.dcard.tw/f/photography"
 
 driver.get(url)
 time.sleep(5)
-
-# 在表單輸入特定關鍵字
-driver.find_element(by=By.TAG_NAME, value='input').send_keys('攝影')
-time.sleep(5)
-
-# 按下查詢按鈕
-# driver.find_element(
-#     by=By.XPATH, value='//*[@id="__next"]/div[1]/div/div[1]/div/div/form/button[2]'
-# ).click()
-# time.sleep(5)
 
 # 將網頁畫面往下滾動至離頂部 5000 高度的位子
 driver.execute_script('var s = document.documentElement.scrollTop=5000')

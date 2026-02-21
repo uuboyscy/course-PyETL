@@ -1,10 +1,7 @@
 [project]
 name = "course-pyetl"
 version = "0.1.0"
-description = ""
-authors = [
-    {name = "uuboyscy",email = "aegis12321@gmail.com"}
-]
+description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -16,8 +13,3 @@ dependencies = [
     "selenium (>=4.38.0,<5.0.0)",
     "jupyter (>=1.1.1,<2.0.0)"
 ]
-
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"

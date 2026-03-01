@@ -1,10 +1,7 @@
 [project]
 name = "course-pyetl"
 version = "0.1.0"
-description = ""
-authors = [
-    {name = "uuboyscy",email = "aegis12321@gmail.com"}
-]
+description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -17,4 +14,3 @@ dependencies = [
     "jupyter (>=1.1.1,<2.0.0)",
     "undetected-chromedriver>=3.5.5",
 ]
-

@@ -11,6 +11,6 @@ dependencies = [
     "jieba (>=0.42.1,<0.43.0)",
     "openpyxl (>=3.1.5,<4.0.0)",
     "selenium (>=4.38.0,<5.0.0)",
-    "jupyter (>=1.1.1,<2.0.0)",
-    "undetected-chromedriver>=3.5.5"
+    "jupyter>=1.1.1,<2.0.0",
+    "undetected-chromedriver>=3.5.5",
 ]
